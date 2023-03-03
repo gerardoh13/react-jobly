@@ -21,9 +21,7 @@ class JoblyApi {
     //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${JoblyApi.token}` };
-    const params = (method === "get")
-        ? data
-        : {};
+    const params = method === "get" ? data : {};
 
     try {
       return (await axios({ url, method, data, params, headers })).data;
@@ -35,12 +33,19 @@ class JoblyApi {
   }
 
   // Individual API routes
-// ------------------USERS---------------------------
-static async login(data) {
-  let res = await this.request("auth/token", data, "post");
-  return res.token;
-}
-// ------------------COMPANIES-----------------------
+
+  // ------------------USERS---------------------------
+  static async login(data) {
+    let res = await this.request("auth/token", data, "post");
+    return res.token;
+  }
+
+  static async register(data) {
+    let res = await this.request("auth/register", data, "post");
+    return res.token;
+  }
+
+  // ------------------COMPANIES-----------------------
 
   /** Get details on a company by handle. */
 
@@ -48,12 +53,17 @@ static async login(data) {
     let res = await this.request(`companies/${handle}`);
     return res.company;
   }
-
+    // ------------------JOBS-----------------------
+    static async getJobs(filters) {
+      let res = await this.request("jobs", { filters });
+      return res.jobs;
+    }
 }
 
 // for now, put token ("testuser" / "password" on class)
-JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
-    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
-    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+JoblyApi.token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+  "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
+  "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
-    export default JoblyApi
+export default JoblyApi;

@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./Signup";
 import Navbar from "./Navbar";
+import JobList from "./jobs/JobList";
 import JoblyApi from "./api";
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
         <Routes>
           <Route exact path="/login" element={<Login login={login} />} />
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/jobs" element={<JobList />} />
+
         </Routes>
       </BrowserRouter>
     </div>
