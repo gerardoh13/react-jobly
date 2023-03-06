@@ -88,8 +88,8 @@ function Pagination({
     return pageList;
   };
   return (
-    <nav label="Page navigation example">
-      <div className="pagination justify-content-end">
+    <nav>
+      <div className="pagination justify-content-start">
         <li key={idx} className="page-item">
           <button
             className="page-link"

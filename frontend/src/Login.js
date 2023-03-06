@@ -39,7 +39,6 @@ function Login({ login }) {
     <div className="card col-lg-4 col-md-5 col-sm-6 col-12 login">
       <div className="card-body">
         <h5 className="card-title">Login</h5>
-        {}
         <form onSubmit={handleSubmit}>
           {errors.length ? alerts : null}
           <div className="form-floating my-4">
