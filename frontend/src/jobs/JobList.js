@@ -6,7 +6,7 @@ import JobFilterForm from "./JobFilterForm";
 
 function JobList() {
   const [jobs, setJobs] = useState([]);
-  const [pagination, setPages] = useState({index: 0});
+  const [pagination, setPages] = useState({ index: 0 });
 
   useEffect(() => {
     getJobs();
@@ -14,21 +14,17 @@ function JobList() {
 
   const getJobs = async (filters) => {
     let allJobs = await JoblyApi.getJobs(filters);
-    console.log(allJobs.length);
-    // if (allJobs.length <= 20) setJobs(allJobs);
-    // else {
-      let pgs = [];
-      for (let i = 0; i < allJobs.length; i += 20) {
-        const page = allJobs.slice(i, i + 20);
-        pgs.push(page);
-      }
-      setJobs(pgs[0]);
-      setPages({
-        pages: pgs,
-        totalPages: pgs.length,
-        index: 0,
-      });
-    // }
+    let pgs = [];
+    for (let i = 0; i < allJobs.length; i += 20) {
+      const page = allJobs.slice(i, i + 20);
+      pgs.push(page);
+    }
+    setJobs(pgs[0]);
+    setPages({
+      pages: pgs,
+      totalPages: pgs.length,
+      index: 0,
+    });
   };
 
   const nextPage = () => {
@@ -55,21 +51,26 @@ function JobList() {
     />
   ));
 
+  let pageNavigation =
+    pagination.totalPages > 1 ? (
+      <Pagination
+        nextPage={nextPage}
+        prevPage={prevPage}
+        goToIdx={goToIdx}
+        totalPages={pagination.totalPages}
+        hasNextPage={pagination.index + 1 === pagination.totalPages}
+        hasPreviousPage={pagination.index !== 0}
+        idx={pagination.index}
+      />
+    ) : null;
+
   return (
     <>
-      <div className="card mt-5 col-8">
-        <JobFilterForm getJobs={getJobs}/>
-        {pagination.pages.length > 1 ?<Pagination
-          nextPage={nextPage}
-          prevPage={prevPage}
-          goToIdx={goToIdx}
-          totalPages={pagination.totalPages}
-          hasNextPage={pagination.index + 1 === pagination.totalPages}
-          hasPreviousPage={pagination.index !== 0}
-          idx={pagination.index}
-        /> : null}
+      <div className="mt-5 col-sm-7 col-12">
+        <JobFilterForm getJobs={getJobs} />
       </div>
-      {cards}
+      <div className="mb-3">{pageNavigation}</div> {cards}
+      <div className="mt-3 mb-4">{pageNavigation}</div>
     </>
   );
 }
