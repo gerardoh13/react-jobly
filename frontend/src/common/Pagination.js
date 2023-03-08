@@ -93,7 +93,7 @@ function Pagination({
               aria-label="Previous"
               onClick={prevPage}
             >
-              <span aria-hidden="true">&laquo;</span> Previous
+              <span aria-hidden="true">&laquo;</span>
             </button>
           </li>
           {createPageBar()}
@@ -104,7 +104,7 @@ function Pagination({
               aria-label="Next"
               onClick={nextPage}
             >
-              Next <span aria-hidden="true">&raquo;</span>
+              <span aria-hidden="true">&raquo;</span>
             </button>
           </li>
         </div>
