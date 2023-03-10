@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import UserContext from "./UserContext";
 
-function Signup() {
-  const INITIAL_STATE = {
-    username: "",
-    fName: "",
-    lName: "",
-    email: "",
-    password: "",
-    confirmPwd: "",
-  };
+function Profile() {
+  let { currUser } = useContext(UserContext);
+  // let INITIAL_STATE = {
+  //   username: "",
+  //   fName: "",
+  //   lName: "",
+  //   email: "",
+  // };
+  // const [formData, setFormData] = useState(INITIAL_STATE)
 
-  const [formData, setFormData] = useState(INITIAL_STATE);
+  const [formData, setFormData] = useState({
+    username: currUser.username,
+    fName: currUser.firstName,
+    lName: currUser.lastName,
+    email: currUser.email,
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    setFormData(INITIAL_STATE);
+    // setFormData(INITIAL_STATE);
   };
 
   const handleChange = (e) => {
@@ -27,9 +33,9 @@ function Signup() {
   };
 
   return (
-    <div className="card col-lg-4 col-md-5 col-sm-6 col-11 mt-5">
+    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 mt-5">
       <div className="card-body">
-        <h5 className="card-title">Sign up</h5>
+        <h5 className="card-title">Profile</h5>
         <form onSubmit={handleSubmit}>
           <div className="form-floating my-3">
             <input
@@ -83,7 +89,7 @@ function Signup() {
             />
             <label htmlFor="email">Email</label>
           </div>
-          <div className="form-floating mb-3">
+          {/* <div className="form-floating mb-3">
             <input
               className="form-control"
               type="password"
@@ -108,12 +114,12 @@ function Signup() {
               onChange={handleChange}
             />
             <label htmlFor="confirmPwd">Confirm Password</label>
-          </div>
-          <button className="btn btn-primary form-control">Submit</button>
+          </div> */}
+          <button className="btn btn-primary form-control">Save Changes</button>
         </form>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default Profile;

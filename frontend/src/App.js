@@ -1,34 +1,55 @@
 import "./App.css";
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
-import Login from "./Login";
-import Signup from "./Signup";
+import { BrowserRouter } from "react-router-dom";
 import Navbar from "./Navbar";
 import JoblyApi from "./api";
-import JobList from "./jobs/JobList";
-import CompanyList from "./companies/CompanyList";
+import NavRoutes from "./common/NavRoutes";
+import { useState, useEffect } from "react";
+import { decodeToken } from "react-jwt";
+import UserContext from "./users/UserContext";
+import { useLocalStorage } from "./hooks";
 
 function App() {
+  const [token, setToken] = useLocalStorage("jobly-token");
+  const [currUser, setCurrUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getCurrUser() {
+      if (!token) return;
+      try {
+        let { username } = decodeToken(token);
+        let user = await JoblyApi.getCurrUser(username);
+        setCurrUser(user);
+      } catch (err) {
+        console.log(err);
+        setCurrUser(null);
+      }
+      setLoading(false)
+    }
+    setLoading(true)
+    getCurrUser();
+  }, [token]);
 
   const login = async (data) => {
     try {
-      let token = await JoblyApi.login(data);
-      // console.log(token)
-      return {valid: true}
+      let userToken = await JoblyApi.login(data);
+      setToken(userToken);
+      return { valid: true };
     } catch (errors) {
-      return {valid: false, errors}
+      return { valid: false, errors };
     }
   };
 
+  if (loading) return (
+    <h1>Loading</h1>
+  )
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route exact path="/login" element={<Login login={login} />} />
-          <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/jobs" element={<JobList />} />
-          <Route exact path="/companies" element={<CompanyList />} />
-        </Routes>
+        <UserContext.Provider value={{ currUser }}>
+          <Navbar />
+          <NavRoutes login={login} />
+        </UserContext.Provider>
       </BrowserRouter>
     </div>
   );

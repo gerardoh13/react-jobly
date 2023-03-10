@@ -27,6 +27,7 @@ function JobFilters({ handleChange, formData }) {
           type="number"
           id="minSalary"
           name="minSalary"
+          min={0}
           onChange={handleChange}
           value={formData.minSalary}
           style={{ width: "100px" }}

@@ -4,7 +4,7 @@ import Pagination from "../common/Pagination";
 import CompanyCard from "./CompanyCard";
 import SearchAndFilter from "../common/SearchAndFilter";
 
-function JobList() {
+function CompanyList() {
   const [companies, setCompanies] = useState([]);
   const [pagination, setPages] = useState({ index: 0 });
 
@@ -77,4 +77,4 @@ function JobList() {
   );
 }
 
-export default JobList;
+export default CompanyList;
