@@ -2,14 +2,7 @@ import React, { useContext, useState } from "react";
 import UserContext from "./UserContext";
 
 function Profile() {
-  let { currUser } = useContext(UserContext);
-  // let INITIAL_STATE = {
-  //   username: "",
-  //   fName: "",
-  //   lName: "",
-  //   email: "",
-  // };
-  // const [formData, setFormData] = useState(INITIAL_STATE)
+  const { currUser } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     username: currUser.username,
@@ -41,12 +34,11 @@ function Profile() {
             <input
               className="form-control"
               type="text"
-              name="username"
               id="username"
               value={formData.username}
               placeholder="username"
-              required
-              onChange={handleChange}
+              disabled
+              readOnly
             />
             <label htmlFor="username">Username</label>
           </div>

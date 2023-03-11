@@ -58,7 +58,7 @@ function SearchAndFilter({ search }) {
       >
         Filters
       </button>
-      <ul className="dropdown-menu text-center">
+      <ul className="dropdown-menu text-center px-2">
         {currLocation === "/jobs" ? (
           <JobFilters handleChange={handleChange} formData={formData} />
         ) : (

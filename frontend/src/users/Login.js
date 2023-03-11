@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
 
 function Login({ login }) {
   const INITIAL_STATE = {
@@ -17,7 +16,7 @@ function Login({ login }) {
     let response = await login(formData);
     setFormData(INITIAL_STATE);
     if (response.valid) {
-      navigate("/signup")
+      navigate("/");
     } else setErrors(response.errors);
   };
 
@@ -36,7 +35,7 @@ function Login({ login }) {
   ));
 
   return (
-    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 login">
+    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 marginT10">
       <div className="card-body">
         <h5 className="card-title">Login</h5>
         <form onSubmit={handleSubmit}>
@@ -69,6 +68,12 @@ function Login({ login }) {
           </div>
           <button className="btn btn-primary form-control">Submit</button>
         </form>
+        <p className="text-center mt-2">
+          New to Jobly?
+          <span className="ms-1">
+            <Link to="/signup">Sign up</Link>
+          </span>
+        </p>
       </div>
     </div>
   );

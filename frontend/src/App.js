@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { decodeToken } from "react-jwt";
 import UserContext from "./users/UserContext";
 import { useLocalStorage } from "./hooks";
+import Spinner from "./common/Spinner";
 
 function App() {
   const [token, setToken] = useLocalStorage("jobly-token");
@@ -15,18 +16,22 @@ function App() {
 
   useEffect(() => {
     async function getCurrUser() {
-      if (!token) return;
+      if (!token) {
+        setLoading(false)
+        return
+      };
       try {
         let { username } = decodeToken(token);
+        JoblyApi.token = token;
         let user = await JoblyApi.getCurrUser(username);
         setCurrUser(user);
       } catch (err) {
         console.log(err);
         setCurrUser(null);
       }
-      setLoading(false)
+      setLoading(false);
     }
-    setLoading(true)
+    setLoading(true);
     getCurrUser();
   }, [token]);
 
@@ -40,15 +45,17 @@ function App() {
     }
   };
 
-  if (loading) return (
-    <h1>Loading</h1>
-  )
+  const logout = async () => {
+    setCurrUser(null);
+    setToken(null);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
         <UserContext.Provider value={{ currUser }}>
-          <Navbar />
-          <NavRoutes login={login} />
+          <Navbar logout={logout} />
+          {loading ? <Spinner/> : <NavRoutes login={login} />}
         </UserContext.Provider>
       </BrowserRouter>
     </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Signup() {
   const INITIAL_STATE = {
@@ -111,6 +112,12 @@ function Signup() {
           </div>
           <button className="btn btn-primary form-control">Submit</button>
         </form>
+        <p className="text-center mt-2">
+          Have an account?
+          <span className="ms-1">
+            <Link to="/login">Login</Link>
+          </span>
+        </p>
       </div>
     </div>
   );

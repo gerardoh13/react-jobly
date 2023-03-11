@@ -1,7 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import { NavLink, Link } from "react-router-dom";
+import UserContext from "./users/UserContext";
 
-function Navbar() {
+function Navbar({logout}) {
+  let { currUser } = useContext(UserContext);
+
   let activeClassName = "nav-link active fw-bold";
 
   const loggedOut = (
@@ -62,9 +65,10 @@ function Navbar() {
         </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/" className="nav-link">
+        <Link to="/" className="nav-link" onClick={logout}>
           Log out
         </Link>
+        {/* <button className="btn nav-link">Log Out</button> */}
       </li>
     </>
   );
@@ -88,7 +92,7 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-start">
-            {false ? loggedOut : loggedIn}
+            {currUser ? loggedIn : loggedOut}
           </ul>
         </div>
       </div>

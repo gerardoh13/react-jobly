@@ -11,6 +11,10 @@ nav {
   width: 100%;
 }
 
-.login {
+.marginT10 {
   margin-top: 10%;
+}
+
+.smLogo {
+  width: 10vw;
 }

@@ -14,7 +14,6 @@ function CompanyList() {
 
   const getCompanies = async (filters) => {
     let allCompanies = await JoblyApi.getCompanies(filters);
-    console.log(allCompanies.length)
     let pgs = [];
     for (let i = 0; i < allCompanies.length; i += 20) {
       const page = allCompanies.slice(i, i + 20);
