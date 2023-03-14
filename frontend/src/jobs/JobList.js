@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Pagination from "../common/Pagination";
 import SearchAndFilter from "../common/SearchAndFilter";
 import JobCard from "./JobCard";
 import { useParams } from "react-router-dom";
+import UserContext from "../users/UserContext";
+import AddJobForm from "./AddJobForm";
 
 function JobList() {
   const [jobs, setJobs] = useState([]);
   const [pagination, setPages] = useState({ index: 0 });
   const [company, setCompany] = useState(null);
-
+  const [show, setShow] = useState(false);
+  const { currUser } = useContext(UserContext);
   const { handle } = useParams();
 
   useEffect(() => {
@@ -41,6 +44,11 @@ function JobList() {
       console.log(e);
     }
   };
+
+  const addJob = async (data) => {
+    await JoblyApi.addJob(data)
+    getJobs()
+  }
 
   const nextPage = () => {
     setJobs(pagination.pages[pagination.index + 1]);
@@ -100,10 +108,25 @@ function JobList() {
 
   return (
     <>
+      <AddJobForm show={show} setShow={setShow} addJob={addJob} />
       <div className="mt-5 col-sm-7 col-12">
         {handle ? header : <SearchAndFilter search={getJobs} />}
       </div>
-      <div className="mb-3">{pageNavigation}</div> {cards}
+      <div className="mb-3 col-sm-7 col-12 row">
+        {currUser.isAdmin ? (
+          <div className="col-sm-12 col-md-3 mb-sm-2">
+            <button className="btn btn-success" onClick={() => setShow(true)}>
+              Add Job
+            </button>
+          </div>
+        ) : null}
+        <div className="col">
+          <div className={currUser.isAdmin ? "float-end" : ""}>
+            {pageNavigation}
+          </div>
+        </div>
+      </div>
+      {cards}
       <div className="mt-3 mb-4">{pageNavigation}</div>
     </>
   );

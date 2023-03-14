@@ -64,23 +64,30 @@ class JoblyApi {
   }
 
   static async getCompanies(filters) {
-    let res = await this.request("companies", {...filters});
+    let res = await this.request("companies", { ...filters });
     return res.companies;
   }
-    // ------------------JOBS-----------------------
-    static async getJobs(filters) {
-      let res = await this.request("jobs", { ...filters });
-      return res.jobs;
-    }
 
-    static async applyToJob(username, id) {
-      // console.log(`users/${username}/jobs/${id}`)
-      let res = await this.request(`users/${username}/jobs/${id}`, {}, "post")
-      return res
-    }
+  static async getHandles() {
+    let res = await this.request("companies/handles", {});
+    return res.handles;
+  }
+
+  // ------------------JOBS-----------------------
+  static async getJobs(filters) {
+    let res = await this.request("jobs", { ...filters });
+    return res.jobs;
+  }
+
+  static async applyToJob(username, id) {
+    let res = await this.request(`users/${username}/jobs/${id}`, {}, "post");
+    return res;
+  }
+
+  static async addJob(data) {
+    let res = await this.request("jobs", data, "post");
+    return res.job;
+  }
 }
-
-
-
 
 export default JoblyApi;
