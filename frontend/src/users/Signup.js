@@ -15,15 +15,27 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    let formatted = formatData();
+    console.log(formatted);
     setFormData(INITIAL_STATE);
+  };
+
+  const formatData = () => {
+    let formatted = {};
+    for (let key in formData) {
+      if (key === "email") {
+        formatted[key] = formData[key].toLowerCase();
+      } else formatted[key] = formData[key].trimEnd();
+    }
+    return formatted;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const trimCheck = name === "fName" || name === "lName";
     setFormData((data) => ({
       ...data,
-      [name]: value.trim(),
+      [name]: trimCheck ? value.trimStart().replace(/\s+/g, " ") : value.trim(),
     }));
   };
 
@@ -80,6 +92,7 @@ function Signup() {
               value={formData.email}
               placeholder="email"
               required
+              minLength="6"
               onChange={handleChange}
             />
             <label htmlFor="email">Email</label>
@@ -93,6 +106,7 @@ function Signup() {
               value={formData.password}
               placeholder="password"
               required
+              minLength="5"
               onChange={handleChange}
             />
             <label htmlFor="password">Password</label>
@@ -106,6 +120,7 @@ function Signup() {
               value={formData.confirmPwd}
               placeholder="confirm password"
               required
+              minLength="5"
               onChange={handleChange}
             />
             <label htmlFor="confirmPwd">Confirm Password</label>

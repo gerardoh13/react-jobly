@@ -13,18 +13,20 @@ function App() {
   const [token, setToken] = useLocalStorage("jobly-token");
   const [currUser, setCurrUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [applicationIds, setApplicationIds] = useState(new Set([]));
 
   useEffect(() => {
     async function getCurrUser() {
       if (!token) {
-        setLoading(false)
-        return
-      };
+        setLoading(false);
+        return;
+      }
       try {
         let { username } = decodeToken(token);
         JoblyApi.token = token;
         let user = await JoblyApi.getCurrUser(username);
         setCurrUser(user);
+        setApplicationIds(new Set(user.applications));
       } catch (err) {
         console.log(err);
         setCurrUser(null);
@@ -50,12 +52,26 @@ function App() {
     setToken(null);
   };
 
+  const applyToJob = async (id) => {
+    if (!currUser) return;
+    try {
+      let res = await JoblyApi.applyToJob(currUser.username, id);
+      return res
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const checkIfApplied = (id) => {
+    return applicationIds.has(id);
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
-        <UserContext.Provider value={{ currUser }}>
+        <UserContext.Provider value={{ currUser, setCurrUser, applyToJob, checkIfApplied }}>
           <Navbar logout={logout} />
-          {loading ? <Spinner/> : <NavRoutes login={login} />}
+          {loading ? <Spinner /> : <NavRoutes login={login} />}
         </UserContext.Provider>
       </BrowserRouter>
     </div>
