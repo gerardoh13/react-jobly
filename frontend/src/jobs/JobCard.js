@@ -50,7 +50,7 @@ function JobCard({ companyName, equity, salary, title, id, setdeleteId, setShow 
           {salary ? <span>Salary: ${salary.toLocaleString()}</span> : null}
           {equity ? <p>Equity: {equity}</p> : null}
         </div>
-        <div className="col-2">{currUser.isAdmin ? adminBtns : userBtn}</div>
+        <div className="col-2 text-end">{currUser.isAdmin ? adminBtns : userBtn}</div>
       </div>
     </div>
   );

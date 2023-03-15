@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import UserContext from "../users/UserContext";
 import AddJobForm from "./AddJobForm";
 import ConfirmModal from "../common/ConfirmModal";
+import CompanyHeader from "../companies/CompanyHeader";
+import JobCardMap from "./JobCardMap";
 
 function JobList() {
   const [jobs, setJobs] = useState([]);
@@ -56,8 +58,7 @@ function JobList() {
 
   const deleteJob = async () => {
     await JoblyApi.deleteJob(deleteId);
-    setShowConfirm(false);
-    setdeleteId(null);
+    closeConfirmModal();
     getJobs();
   };
 
@@ -80,18 +81,6 @@ function JobList() {
     setJobs(pagination.pages[idx]);
     setPages((prev) => ({ ...prev, index: idx }));
   };
-  const cards = jobs.map((job) => (
-    <JobCard
-      key={job.id}
-      id={job.id}
-      companyName={job.companyName || company.name}
-      equity={job.equity}
-      salary={job.salary}
-      title={job.title}
-      setdeleteId={setdeleteId}
-      setShow={setShowConfirm}
-    />
-  ));
 
   const pageNavigation =
     pagination.totalPages > 1 ? (
@@ -107,21 +96,7 @@ function JobList() {
     ) : null;
 
   let header = company ? (
-    <div className="card color-light mb-3">
-      <div className="card-body">
-        <p>
-          <b className="fs-3">{company.name}</b>
-          {company.logoUrl ? (
-            <img
-              className="float-end smLogo"
-              src={company.logoUrl}
-              alt="company logo"
-            />
-          ) : null}
-        </p>
-        <p className="card-text">{company.description}</p>
-      </div>
-    </div>
+    <CompanyHeader company={company} setShowForm={setShowForm} />
   ) : null;
 
   return (
@@ -153,7 +128,12 @@ function JobList() {
         </div>
       </div>
       {jobs.length ? (
-        cards
+        <JobCardMap
+          jobs={jobs}
+          setdeleteId={setdeleteId}
+          company={company}
+          setShowConfirm={setShowConfirm}
+        />
       ) : (
         <div className="card">
           <div className="card-body text-center">
