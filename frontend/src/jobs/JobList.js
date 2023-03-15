@@ -34,7 +34,7 @@ function JobList() {
         const page = allJobs.slice(i, i + 20);
         pgs.push(page);
       }
-      setJobs(pgs[0]);
+      setJobs(pgs[0] || []);
       setPages({
         pages: pgs,
         totalPages: pgs.length,
@@ -89,7 +89,7 @@ function JobList() {
     ) : null;
 
   let header = company ? (
-    <div className="card color-light">
+    <div className="card color-light mb-3">
       <div className="card-body">
         <p>
           <b className="fs-3">{company.name}</b>

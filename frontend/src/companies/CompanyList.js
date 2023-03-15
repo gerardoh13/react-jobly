@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Pagination from "../common/Pagination";
 import CompanyCard from "./CompanyCard";
 import SearchAndFilter from "../common/SearchAndFilter";
+import UserContext from "../users/UserContext";
+import AddCompanyForm from "./AddCompanyForm";
 
 function CompanyList() {
   const [companies, setCompanies] = useState([]);
   const [pagination, setPages] = useState({ index: 0 });
+  const { currUser } = useContext(UserContext);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     getCompanies();
@@ -27,6 +31,10 @@ function CompanyList() {
     });
   };
 
+  const addCompany = async (data) =>{
+    await JoblyApi.addCompany(data)
+    getCompanies()
+  }
   const nextPage = () => {
     setCompanies(pagination.pages[pagination.index + 1]);
     setPages((prev) => ({ ...prev, index: prev.index + 1 }));
@@ -66,10 +74,26 @@ function CompanyList() {
 
   return (
     <>
+      <AddCompanyForm show={show} setShow={setShow} 
+      addCompany={addCompany} 
+      />
       <div className="mt-5 col-sm-7 col-12">
         <SearchAndFilter search={getCompanies} />
       </div>
-      <div className="mb-3">{pageNavigation}</div> 
+      <div className="mb-3 col-sm-7 col-12 row">
+        {currUser.isAdmin ? (
+          <div className="col-sm-12 col-md-3 mb-sm-2">
+            <button className="btn btn-success" onClick={() => setShow(true)}>
+              Add Company
+            </button>
+          </div>
+        ) : null}
+        <div className="col">
+          <div className={currUser.isAdmin ? "float-end" : ""}>
+            {pageNavigation}
+          </div>
+        </div>
+      </div>
       {cards}
       <div className="mt-3 mb-4">{pageNavigation}</div>
     </>

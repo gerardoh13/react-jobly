@@ -6,7 +6,7 @@ function CompanyCard({ name, description, handle, logoUrl }) {
     navigate(handle);
   };
   return (
-    <div className="card my-2 col-12 col-sm-7" onClick={handleClick}>
+    <div className="card my-2 col-12 col-sm-7 pointer" onClick={handleClick}>
       <div className="card-body">
         <p>
           <b>{name}</b>

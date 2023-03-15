@@ -18,3 +18,7 @@ nav {
 .smLogo {
   width: 10vw;
 }
+
+.pointer {
+  cursor: pointer;
+}

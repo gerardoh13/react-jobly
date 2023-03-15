@@ -125,7 +125,7 @@ function AddJobForm({ show, setShow, addJob }) {
               >
                 Close
               </button>
-              <button className="btn btn-primary">Save changes</button>
+              <button className="btn btn-success">Add Job</button>
             </div>
           </form>
         </Modal.Body>
