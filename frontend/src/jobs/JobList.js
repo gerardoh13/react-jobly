@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Pagination from "../common/Pagination";
 import SearchAndFilter from "../common/SearchAndFilter";
-import JobCard from "./JobCard";
 import { useParams } from "react-router-dom";
 import UserContext from "../users/UserContext";
 import AddJobForm from "./AddJobForm";
@@ -96,7 +95,7 @@ function JobList() {
     ) : null;
 
   let header = company ? (
-    <CompanyHeader company={company} setShowForm={setShowForm} />
+    <CompanyHeader company={company} setShowForm={setShowForm} admin={currUser.isAdmin} />
   ) : null;
 
   return (

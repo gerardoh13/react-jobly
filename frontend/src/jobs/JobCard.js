@@ -1,7 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../users/UserContext";
 
-function JobCard({ companyName, equity, salary, title, id, setdeleteId, setShow }) {
+function JobCard({
+  companyName,
+  equity,
+  salary,
+  title,
+  id,
+  setdeleteId,
+  setShow,
+}) {
   const [applied, setApplied] = useState(false);
   const { applyToJob, checkIfApplied, currUser } = useContext(UserContext);
 
@@ -16,9 +24,9 @@ function JobCard({ companyName, equity, salary, title, id, setdeleteId, setShow 
   };
 
   const handleDelete = () => {
-    setShow(true)
-    setdeleteId(id)
-  }
+    setShow(true);
+    setdeleteId(id);
+  };
 
   const userBtn = (
     <button
@@ -35,7 +43,7 @@ function JobCard({ companyName, equity, salary, title, id, setdeleteId, setShow 
       <button className="btn btn-info me-1" onClick={apply}>
         <i className="bi bi-pencil-fill"></i>
       </button>
-      <button className="btn btn-danger " onClick={handleDelete}>
+      <button className="btn btn-danger" onClick={handleDelete}>
         <i className="bi bi-trash"></i>
       </button>
     </>
@@ -50,7 +58,9 @@ function JobCard({ companyName, equity, salary, title, id, setdeleteId, setShow 
           {salary ? <span>Salary: ${salary.toLocaleString()}</span> : null}
           {equity ? <p>Equity: {equity}</p> : null}
         </div>
-        <div className="col-2 text-end">{currUser.isAdmin ? adminBtns : userBtn}</div>
+        <div className="col-2 text-end">
+          {currUser.isAdmin ? adminBtns : userBtn}
+        </div>
       </div>
     </div>
   );

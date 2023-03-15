@@ -23,7 +23,7 @@ function CompanyList() {
       const page = allCompanies.slice(i, i + 20);
       pgs.push(page);
     }
-    setCompanies(pgs[0]);
+    setCompanies(pgs[0] || []);
     setPages({
       pages: pgs,
       totalPages: pgs.length,
@@ -92,7 +92,18 @@ function CompanyList() {
           </div>
         </div>
       </div>
-      {cards}
+      {companies.length ? cards : (
+                <div className="card">
+                <div className="card-body text-center">
+                  <h5 className="card-title">No companies found</h5>
+                  <p>
+                    {currUser.isAdmin
+                      ? "How about adding a new one?"
+                      : "Try a different search or adjust your filters"}
+                  </p>
+                </div>
+              </div>
+      )}
       <div className="mt-3 mb-4">{pageNavigation}</div>
     </>
   );
