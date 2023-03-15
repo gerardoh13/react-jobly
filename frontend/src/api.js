@@ -92,6 +92,11 @@ class JoblyApi {
     let res = await this.request("jobs", data, "post");
     return res.job;
   }
+
+  static async deleteJob(id) {
+    let res = await this.request(`jobs/${id}`, {}, "delete");
+    return res;
+  }
 }
 
 export default JoblyApi;

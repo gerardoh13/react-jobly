@@ -85,7 +85,7 @@ function Pagination({
   if (totalPages < 6)
     return (
       <nav>
-        <div className="pagination">
+        <div className="pagination justify-content-center">
           <li className="page-item">
             <button
               className="page-link"

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Modal from "react-bootstrap/Modal";
 import Alerts from "../common/Alerts";
+import UserContext from "../users/UserContext";
 
 function AddCompanyForm({ show, setShow, addCompany }) {
   let DEFAULT_FORM = {
@@ -13,14 +14,17 @@ function AddCompanyForm({ show, setShow, addCompany }) {
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [handles, setHandles] = useState(new Set([]));
   const [errors, setErrors] = useState([]);
+  const { currUser } = useContext(UserContext);
 
   useEffect(() => {
     async function getHandles() {
-      let handlesRes = await JoblyApi.getHandles();
-      setHandles(new Set(handlesRes));
+      if (currUser.isAdmin) {
+        let handlesRes = await JoblyApi.getHandles();
+        setHandles(new Set(handlesRes));
+      }
     }
     getHandles();
-  }, []);
+  }, [currUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,12 +60,11 @@ function AddCompanyForm({ show, setShow, addCompany }) {
 
   const resetForm = () => {
     setFormData(DEFAULT_FORM);
-    setErrors([])
+    setErrors([]);
     setShow(false);
   };
 
   return (
-    <>
       <Modal show={show}>
         <Modal.Header>
           <Modal.Title>Add New Company</Modal.Title>
@@ -139,7 +142,6 @@ function AddCompanyForm({ show, setShow, addCompany }) {
           </form>
         </Modal.Body>
       </Modal>
-    </>
   );
 }
 

@@ -31,10 +31,10 @@ function CompanyList() {
     });
   };
 
-  const addCompany = async (data) =>{
-    await JoblyApi.addCompany(data)
-    getCompanies()
-  }
+  const addCompany = async (data) => {
+    await JoblyApi.addCompany(data);
+    getCompanies();
+  };
   const nextPage = () => {
     setCompanies(pagination.pages[pagination.index + 1]);
     setPages((prev) => ({ ...prev, index: prev.index + 1 }));
@@ -74,9 +74,7 @@ function CompanyList() {
 
   return (
     <>
-      <AddCompanyForm show={show} setShow={setShow} 
-      addCompany={addCompany} 
-      />
+      <AddCompanyForm show={show} setShow={setShow} addCompany={addCompany} />
       <div className="mt-5 col-sm-7 col-12">
         <SearchAndFilter search={getCompanies} />
       </div>

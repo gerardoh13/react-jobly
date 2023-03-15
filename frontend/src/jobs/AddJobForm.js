@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Modal from "react-bootstrap/Modal";
+import UserContext from "../users/UserContext";
 
 function AddJobForm({ show, setShow, addJob }) {
   let DEFAULT_FORM = {
@@ -11,14 +12,17 @@ function AddJobForm({ show, setShow, addJob }) {
   };
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [handles, setHandles] = useState([]);
+  const { currUser } = useContext(UserContext);
 
   useEffect(() => {
     async function getHandles() {
-      let handlesRes = await JoblyApi.getHandles();
-      setHandles(handlesRes);
+      if (currUser.isAdmin) {
+        let handlesRes = await JoblyApi.getHandles();
+        setHandles(handlesRes);
+      }
     }
     getHandles();
-  }, []);
+  }, [currUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +57,6 @@ function AddJobForm({ show, setShow, addJob }) {
   ));
 
   return (
-    <>
       <Modal show={show}>
         <Modal.Header>
           <Modal.Title>Add New Job</Modal.Title>
@@ -130,7 +133,6 @@ function AddJobForm({ show, setShow, addJob }) {
           </form>
         </Modal.Body>
       </Modal>
-    </>
   );
 }
 
