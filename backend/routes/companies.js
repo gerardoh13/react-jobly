@@ -15,7 +15,6 @@ const companySearchSchema = require("../schemas/companySearch.json");
 
 const router = new express.Router();
 
-
 /** POST / { company } =>  { company }
  *
  * company should be { handle, name, description, numEmployees, logoUrl }
@@ -29,7 +28,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, companyNewSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -60,12 +59,26 @@ router.get("/", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(q, companySearchSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
     const companies = await Company.findAll(q);
     return res.json({ companies });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** GET /handles  =>  { [handles] }
+ *
+ * Authorization required: admin
+ */
+
+router.get("/handles", ensureAdmin, async function (req, res, next) {
+  try {
+    const handles = await Company.getHandles();
+    return res.json({ handles });
   } catch (err) {
     return next(err);
   }
@@ -103,7 +116,7 @@ router.patch("/:handle", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, companyUpdateSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -127,6 +140,5 @@ router.delete("/:handle", ensureAdmin, async function (req, res, next) {
     return next(err);
   }
 });
-
 
 module.exports = router;
