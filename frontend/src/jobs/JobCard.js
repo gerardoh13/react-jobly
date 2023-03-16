@@ -40,10 +40,10 @@ function JobCard({
 
   const adminBtns = (
     <>
-      <button className="btn btn-info me-1" onClick={apply}>
+      <button className="btn btn-outline-info me-xl-1 mb-xl-0 mb-1" onClick={() => console.log("HAI")}>
         <i className="bi bi-pencil-fill"></i>
       </button>
-      <button className="btn btn-danger" onClick={handleDelete}>
+      <button className="btn btn-outline-danger" onClick={handleDelete}>
         <i className="bi bi-trash"></i>
       </button>
     </>

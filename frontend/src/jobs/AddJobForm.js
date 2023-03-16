@@ -2,8 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import JoblyApi from "../api";
 import Modal from "react-bootstrap/Modal";
 import UserContext from "../users/UserContext";
+import { useParams } from "react-router-dom";
 
 function AddJobForm({ show, setShow, addJob }) {
+  const { handle } = useParams();
   let DEFAULT_FORM = {
     title: "",
     salary: "",
@@ -23,6 +25,13 @@ function AddJobForm({ show, setShow, addJob }) {
     }
     getHandles();
   }, [currUser]);
+
+  useEffect(() => {
+    setFormData((data) => ({
+      ...data,
+      handle: handle ? handle : "",
+    }));
+  }, [handle]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,82 +66,83 @@ function AddJobForm({ show, setShow, addJob }) {
   ));
 
   return (
-      <Modal show={show}>
-        <Modal.Header>
-          <Modal.Title>Add New Job</Modal.Title>
-          <button
-            className="btn-close"
-            aria-label="Close"
-            onClick={resetForm}
-          ></button>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={handleSubmit}>
-            <div className="form-floating my-2">
-              <input
-                className="form-control"
-                type="text"
-                name="title"
-                id="title"
-                value={formData.title}
-                placeholder="title"
-                required
-                onChange={handleChange}
-              />
-              <label htmlFor="title">Title (Required)</label>
-            </div>
-            <select
-              className="form-select mt-3"
-              name="handle"
+    <Modal show={show}>
+      <Modal.Header>
+        <Modal.Title>Add New Job</Modal.Title>
+        <button
+          className="btn-close"
+          aria-label="Close"
+          onClick={resetForm}
+        ></button>
+      </Modal.Header>
+      <Modal.Body>
+        <form onSubmit={handleSubmit}>
+          <div className="form-floating my-2">
+            <input
+              className="form-control"
+              type="text"
+              name="title"
+              id="title"
+              value={formData.title}
+              placeholder="title"
               required
-              value={formData.handle}
               onChange={handleChange}
+            />
+            <label htmlFor="title">Title (Required)</label>
+          </div>
+          <select
+            className="form-select mt-3"
+            name="handle"
+            required
+            value={formData.handle}
+            disabled={handle}
+            onChange={handleChange}
+          >
+            <option value="">Company Handle (Required)</option>
+            {options}
+          </select>
+          <div className="form-floating my-3">
+            <input
+              className="form-control"
+              type="number"
+              name="salary"
+              id="salary"
+              min="0"
+              value={formData.salary}
+              placeholder="salary"
+              onChange={handleChange}
+            />
+            <label htmlFor="title">Salary</label>
+          </div>
+          <div className="form-floating my-3">
+            <input
+              className="form-control"
+              type="number"
+              name="equity"
+              id="equity"
+              min="0"
+              max="1"
+              step="0.001"
+              value={formData.equity}
+              placeholder="equity"
+              onChange={handleChange}
+            />
+            <label htmlFor="equity">Equity</label>
+          </div>
+          <div className="float-end">
+            <button
+              type="button"
+              className="btn btn-secondary me-2"
+              data-bs-dismiss="modal"
+              onClick={resetForm}
             >
-              <option value="">Company Handle (Required)</option>
-              {options}
-            </select>
-            <div className="form-floating my-3">
-              <input
-                className="form-control"
-                type="number"
-                name="salary"
-                id="salary"
-                min="0"
-                value={formData.salary}
-                placeholder="salary"
-                onChange={handleChange}
-              />
-              <label htmlFor="title">Salary</label>
-            </div>
-            <div className="form-floating my-3">
-              <input
-                className="form-control"
-                type="number"
-                name="equity"
-                id="equity"
-                min="0"
-                max="1"
-                step="0.001"
-                value={formData.equity}
-                placeholder="equity"
-                onChange={handleChange}
-              />
-              <label htmlFor="equity">Equity</label>
-            </div>
-            <div className="float-end">
-              <button
-                type="button"
-                className="btn btn-secondary me-2"
-                data-bs-dismiss="modal"
-                onClick={resetForm}
-              >
-                Close
-              </button>
-              <button className="btn btn-success">Add Job</button>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
+              Close
+            </button>
+            <button className="btn btn-success">Add Job</button>
+          </div>
+        </form>
+      </Modal.Body>
+    </Modal>
   );
 }
 

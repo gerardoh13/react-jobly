@@ -4,13 +4,20 @@ import Modal from "react-bootstrap/Modal";
 import Alerts from "../common/Alerts";
 import UserContext from "../users/UserContext";
 
-function AddCompanyForm({ show, setShow, addCompany }) {
-  let DEFAULT_FORM = {
-    name: "",
-    description: "",
-    numEmployees: "",
-    logoUrl: "",
-  };
+function AddCompanyForm({ show, setShow, submit, company }) {
+  let DEFAULT_FORM = company
+    ? {
+        name: company.name,
+        description: company.description,
+        numEmployees: company.numEmployees || "",
+        logoUrl: company.logoUrl || "",
+      }
+    : {
+        name: "",
+        description: "",
+        numEmployees: "",
+        logoUrl: "",
+      };
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [handles, setHandles] = useState(new Set([]));
   const [errors, setErrors] = useState([]);
@@ -30,7 +37,7 @@ function AddCompanyForm({ show, setShow, addCompany }) {
     e.preventDefault();
     if (!formData.name || !formData.description) return;
     const handle = formatHandle(formData.name);
-    if (handles.has(handle)) {
+    if (handles.has(handle) && !company) {
       setErrors([`${formData.name} already exists`]);
       return;
     }
@@ -41,8 +48,7 @@ function AddCompanyForm({ show, setShow, addCompany }) {
     };
     if (formData.numEmployees) newCompany.numEmployees = +formData.numEmployees;
     if (formData.logoUrl) newCompany.logoUrl = formData.logoUrl;
-    // console.log(newCompany);
-    addCompany(newCompany);
+    submit(newCompany);
     resetForm();
   };
 
@@ -65,83 +71,87 @@ function AddCompanyForm({ show, setShow, addCompany }) {
   };
 
   return (
-      <Modal show={show}>
-        <Modal.Header>
-          <Modal.Title>Add New Company</Modal.Title>
-          <button
-            className="btn-close"
-            aria-label="Close"
-            onClick={resetForm}
-          ></button>
-        </Modal.Header>
-        <Modal.Body>
-          {errors.length ? <Alerts msgs={errors} /> : null}
-          <form onSubmit={handleSubmit}>
-            <div className="form-floating my-2">
-              <input
-                className="form-control"
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                placeholder="name"
-                required
-                onChange={handleChange}
-              />
-              <label htmlFor="name">Name (Required)</label>
-            </div>
-            <div className="form-floating my-2">
-              <input
-                className="form-control"
-                type="text"
-                name="description"
-                id="description"
-                value={formData.description}
-                placeholder="description"
-                required
-                onChange={handleChange}
-              />
-              <label htmlFor="description">Description (Required)</label>
-            </div>
-            <div className="form-floating my-3">
-              <input
-                className="form-control"
-                type="number"
-                name="numEmployees"
-                id="numEmployees"
-                min="0"
-                value={formData.numEmployees}
-                placeholder="numEmployees"
-                onChange={handleChange}
-              />
-              <label htmlFor="title">Employee Count (Optional)</label>
-            </div>
-            <div className="form-floating my-3">
-              <input
-                className="form-control"
-                type="url"
-                name="logoUrl"
-                id="logoUrl"
-                value={formData.logoUrl}
-                placeholder="logoUrl"
-                onChange={handleChange}
-              />
-              <label htmlFor="logoUrl">Logo URL (Optional)</label>
-            </div>
-            <div className="float-end">
-              <button
-                type="button"
-                className="btn btn-secondary me-2"
-                data-bs-dismiss="modal"
-                onClick={resetForm}
-              >
-                Close
-              </button>
-              <button className="btn btn-success">Add Company</button>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
+    <Modal show={show}>
+      <Modal.Header>
+        <Modal.Title>
+          {company ? "Edit Company" : "Add New Company"}
+        </Modal.Title>
+        <button
+          className="btn-close"
+          aria-label="Close"
+          onClick={resetForm}
+        ></button>
+      </Modal.Header>
+      <Modal.Body>
+        {errors.length ? <Alerts msgs={errors} /> : null}
+        <form onSubmit={handleSubmit}>
+          <div className="form-floating my-2">
+            <input
+              className="form-control"
+              type="text"
+              name="name"
+              id="name"
+              value={formData.name}
+              placeholder="name"
+              required
+              onChange={handleChange}
+            />
+            <label htmlFor="name">Name (Required)</label>
+          </div>
+          <div className="form-floating my-2">
+            <input
+              className="form-control"
+              type="text"
+              name="description"
+              id="description"
+              value={formData.description}
+              placeholder="description"
+              required
+              onChange={handleChange}
+            />
+            <label htmlFor="description">Description (Required)</label>
+          </div>
+          <div className="form-floating my-3">
+            <input
+              className="form-control"
+              type="number"
+              name="numEmployees"
+              id="numEmployees"
+              min="0"
+              value={formData.numEmployees}
+              placeholder="numEmployees"
+              onChange={handleChange}
+            />
+            <label htmlFor="title">Employee Count (Optional)</label>
+          </div>
+          <div className="form-floating my-3">
+            <input
+              className="form-control"
+              type="url"
+              name="logoUrl"
+              id="logoUrl"
+              value={formData.logoUrl}
+              placeholder="logoUrl"
+              onChange={handleChange}
+            />
+            <label htmlFor="logoUrl">Logo URL (Optional)</label>
+          </div>
+          <div className="float-end">
+            <button
+              type="button"
+              className="btn btn-secondary me-2"
+              data-bs-dismiss="modal"
+              onClick={resetForm}
+            >
+              Close
+            </button>
+            <button className="btn btn-success">
+              {company ? "Edit" : "Add"} Company
+            </button>
+          </div>
+        </form>
+      </Modal.Body>
+    </Modal>
   );
 }
 

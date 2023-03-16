@@ -72,37 +72,42 @@ function CompanyList() {
       />
     ) : null;
 
+  let btnColClass = `col-sm-12 col-md-3 mb-sm-2 ${
+    currUser.isAdmin ? "ps-0" : ""
+  }`;
   return (
     <>
-      <AddCompanyForm show={show} setShow={setShow} addCompany={addCompany} />
+      <AddCompanyForm show={show} setShow={setShow} submit={addCompany} />
       <div className="mt-5 col-sm-7 col-12">
         <SearchAndFilter search={getCompanies} />
       </div>
       <div className="mb-3 col-sm-7 col-12 row">
         {currUser.isAdmin ? (
-          <div className="col-sm-12 col-md-3 mb-sm-2">
+          <div className={btnColClass}>
             <button className="btn btn-success" onClick={() => setShow(true)}>
               Add Company
             </button>
           </div>
         ) : null}
-        <div className="col">
+        <div className={currUser.isAdmin ? "col pe-0" : "col"}>
           <div className={currUser.isAdmin ? "float-end" : ""}>
             {pageNavigation}
           </div>
         </div>
       </div>
-      {companies.length ? cards : (
-                <div className="card">
-                <div className="card-body text-center">
-                  <h5 className="card-title">No companies found</h5>
-                  <p>
-                    {currUser.isAdmin
-                      ? "How about adding a new one?"
-                      : "Try a different search or adjust your filters"}
-                  </p>
-                </div>
-              </div>
+      {companies.length ? (
+        cards
+      ) : (
+        <div className="card">
+          <div className="card-body text-center">
+            <h5 className="card-title">No companies found</h5>
+            <p>
+              {currUser.isAdmin
+                ? "How about adding a new one?"
+                : "Try a different search or adjust your filters"}
+            </p>
+          </div>
+        </div>
       )}
       <div className="mt-3 mb-4">{pageNavigation}</div>
     </>

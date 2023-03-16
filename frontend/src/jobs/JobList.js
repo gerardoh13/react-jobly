@@ -98,6 +98,9 @@ function JobList() {
     <CompanyHeader company={company} setShowForm={setShowForm} admin={currUser.isAdmin} />
   ) : null;
 
+  let btnColClass = `col-sm-12 col-md-3 mb-sm-2 ${
+    currUser.isAdmin ? "ps-0" : ""
+  }`;
   return (
     <>
       <ConfirmModal
@@ -111,7 +114,7 @@ function JobList() {
       </div>
       <div className="mb-3 col-sm-7 col-12 row">
         {currUser.isAdmin ? (
-          <div className="col-sm-12 col-md-3 mb-sm-2">
+          <div className={btnColClass}>
             <button
               className="btn btn-success"
               onClick={() => setShowForm(true)}
@@ -120,7 +123,7 @@ function JobList() {
             </button>
           </div>
         ) : null}
-        <div className="col">
+        <div className={currUser.isAdmin ? "col pe-0" : "col"}>
           <div className={currUser.isAdmin ? "float-end" : ""}>
             {pageNavigation}
           </div>
