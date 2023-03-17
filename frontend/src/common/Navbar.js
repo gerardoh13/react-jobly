@@ -1,9 +1,10 @@
-import React, {useContext} from "react";
-import { NavLink, Link } from "react-router-dom";
-import UserContext from "./users/UserContext";
+import React, { useContext } from "react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import UserContext from "../users/UserContext";
 
-function Navbar({logout}) {
+function Navbar({ logout }) {
   let { currUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   let activeClassName = "nav-link active fw-bold";
 
@@ -12,9 +13,12 @@ function Navbar({logout}) {
       <li className="nav-item">
         <NavLink
           to="/login"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
           className={({ isActive }) =>
             isActive ? activeClassName : "nav-link"
           }
+          onClick={() => navigate("/login")}
         >
           Login
         </NavLink>
@@ -22,9 +26,12 @@ function Navbar({logout}) {
       <li className="nav-item">
         <NavLink
           to="/signup"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
           className={({ isActive }) =>
             isActive ? activeClassName : "nav-link"
           }
+          onClick={() => navigate("/signup")}
         >
           Sign up
         </NavLink>
@@ -36,20 +43,26 @@ function Navbar({logout}) {
     <>
       <li className="nav-item">
         <NavLink
-          to="companies"
+          to="/companies"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
           className={({ isActive }) =>
             isActive ? activeClassName : "nav-link"
           }
+          onClick={() => navigate("/companies")}
         >
           Companies
         </NavLink>
       </li>
       <li className="nav-item">
         <NavLink
-          to="jobs"
+          to="/jobs"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
           className={({ isActive }) =>
             isActive ? activeClassName : "nav-link"
           }
+          onClick={() => navigate("/jobs")}
         >
           Jobs
         </NavLink>
@@ -57,18 +70,25 @@ function Navbar({logout}) {
       <li className="nav-item">
         <NavLink
           to="/profile"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
           className={({ isActive }) =>
             isActive ? activeClassName : "nav-link"
           }
+          onClick={() => navigate("/profile")}
         >
           Profile
         </NavLink>
       </li>
       <li className="nav-item">
-        <Link to="/" className="nav-link" onClick={logout}>
+        <Link
+          className="nav-link"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
+          onClick={logout}
+        >
           Log out
         </Link>
-        {/* <button className="btn nav-link">Log Out</button> */}
       </li>
     </>
   );
