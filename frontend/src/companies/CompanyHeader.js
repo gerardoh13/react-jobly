@@ -19,8 +19,8 @@ function CompanyHeader({ company, admin }) {
   const editCompany = async (data) => {
     delete data.handle
     await JoblyApi.editCompany(company.handle, data);
-    console.log(data)
     close();
+    navigate("/companies");
   };
 
   const close = () => {

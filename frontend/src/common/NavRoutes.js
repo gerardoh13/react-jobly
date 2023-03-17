@@ -5,15 +5,17 @@ import JobList from "../jobs/JobList";
 import CompanyList from "../companies/CompanyList";
 import Profile from "../users/Profile";
 import Home from "./Home";
-import PrivateRoute from "./PrivateRoute";
-
+import PrivateRoutes from "./PrivateRoutes";
+import PublicRoutes from "./PublicRoutes";
 function NavRoutes({ login }) {
   return (
     <Routes>
       <Route exact path="/" element={<Home />} />
-      <Route exact path="/login" element={<Login login={login} />} />
-      <Route exact path="/signup" element={<Signup />} />
-      <Route element={<PrivateRoute />}>
+      <Route element={<PublicRoutes />}>
+        <Route exact path="/login" element={<Login login={login} />} />
+        <Route exact path="/signup" element={<Signup />} />
+      </Route>
+      <Route element={<PrivateRoutes />}>
         <Route exact path="/profile" element={<Profile />} />
         <Route path="/companies/:handle" element={<JobList companyJobs />} />
         <Route exact path="/companies" element={<CompanyList />} />

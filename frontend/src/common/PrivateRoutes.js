@@ -8,7 +8,6 @@ function PrivateRoute() {
   if (!currUser) {
     return <Navigate to="/login" replace />;
   }
-
   return <Outlet />;
 }
 
