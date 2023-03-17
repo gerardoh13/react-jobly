@@ -55,8 +55,18 @@ function App() {
   const applyToJob = async (id) => {
     if (!currUser) return;
     try {
-      let res = await JoblyApi.applyToJob(currUser.username, id);
-      return res
+      await JoblyApi.applyToJob(currUser.username, id);
+      setApplicationIds(new Set([...applicationIds, id]));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const unApplyToJob = async (id) => {
+    if (!currUser) return;
+    try {
+      await JoblyApi.unApplyToJob(currUser.username, id);
+      setApplicationIds((prev) => new Set([...prev].filter((i) => i !== id)));
     } catch (e) {
       console.log(e);
     }
@@ -64,12 +74,20 @@ function App() {
 
   const checkIfApplied = (id) => {
     return applicationIds.has(id);
-  }
+  };
 
   return (
     <div className="App">
       <BrowserRouter>
-        <UserContext.Provider value={{ currUser, setCurrUser, applyToJob, checkIfApplied }}>
+        <UserContext.Provider
+          value={{
+            currUser,
+            setCurrUser,
+            applyToJob,
+            checkIfApplied,
+            unApplyToJob,
+          }}
+        >
           <Navbar logout={logout} />
           {loading ? <Spinner /> : <NavRoutes login={login} />}
         </UserContext.Provider>

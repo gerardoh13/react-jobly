@@ -86,6 +86,7 @@ function Profile() {
               id="username"
               value={formData.username}
               placeholder="username"
+              autoComplete="username"
               disabled
               readOnly
             />
@@ -141,6 +142,7 @@ function Profile() {
               placeholder="password"
               required
               minLength="5"
+              autoComplete="current-password"
               onChange={handleChange}
             />
             <label htmlFor="password">Confirm password to make changes</label>

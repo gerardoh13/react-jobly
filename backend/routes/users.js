@@ -138,4 +138,14 @@ router.post("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req
 });
 
 
+router.get("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req, res, next) {
+  try {
+    const jobId = +req.params.id;
+    await User.unApplyToJob(req.params.username, jobId);
+    return res.json({ unApplied: jobId });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = router;

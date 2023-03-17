@@ -11,7 +11,8 @@ function JobCard({
   setShow,
 }) {
   const [applied, setApplied] = useState(false);
-  const { applyToJob, checkIfApplied, currUser } = useContext(UserContext);
+  const { applyToJob, checkIfApplied, currUser, unApplyToJob } =
+    useContext(UserContext);
 
   useEffect(() => {
     setApplied(checkIfApplied(id));
@@ -19,8 +20,14 @@ function JobCard({
 
   const apply = async () => {
     if (checkIfApplied(id)) return;
-    let appSuccess = await applyToJob(id);
-    setApplied(appSuccess.applied === id);
+    await applyToJob(id);
+    setApplied(true);
+  };
+
+  const unApply = async () => {
+    if (!checkIfApplied(id)) return;
+    await unApplyToJob(id);
+    setApplied(false);
   };
 
   const handleDelete = () => {
@@ -31,16 +38,18 @@ function JobCard({
   const userBtn = (
     <button
       className="btn btn-danger float-end"
-      onClick={apply}
-      disabled={applied}
+      onClick={applied ? unApply : apply}
     >
-      {applied ? "Applied" : "Apply"}
+      {applied ? "Unapply" : "Apply"}
     </button>
   );
 
   const adminBtns = (
     <>
-      <button className="btn btn-outline-info me-xl-1 mb-xl-0 mb-1" onClick={() => console.log("HAI")}>
+      <button
+        className="btn btn-outline-info me-xl-1 mb-xl-0 mb-1"
+        onClick={() => console.log("HAI")}
+      >
         <i className="bi bi-pencil-fill"></i>
       </button>
       <button className="btn btn-outline-danger" onClick={handleDelete}>
