@@ -9,6 +9,7 @@ function JobCard({
   id,
   setdeleteId,
   setShow,
+  profile,
 }) {
   const [applied, setApplied] = useState(false);
   const { applyToJob, checkIfApplied, currUser, unApplyToJob } =
@@ -57,17 +58,26 @@ function JobCard({
       </button>
     </>
   );
+
+  let cardClass = profile ? "card mb-2 col-12" : "card my-2 col-12 col-sm-7";
   return (
-    <div className="card my-2 col-12 col-sm-7">
+    <div className={cardClass}>
       <div className="card-body row">
-        <div className="col-10">
+        <div className="col-9">
           <p>
-            <b>{title}</b>, <em>{companyName}</em>
+            <b>{title}</b>
+            <br />
+            <em>{companyName}</em>
           </p>
           {salary ? <span>Salary: ${salary.toLocaleString()}</span> : null}
-          {equity ? <p>Equity: {equity}</p> : null}
+          {equity ? (
+            <>
+              <br />
+              <span>Equity: {equity}</span>{" "}
+            </>
+          ) : null}
         </div>
-        <div className="col-2 text-end">
+        <div className="col-3 btnBottomEnd">
           {currUser.isAdmin ? adminBtns : userBtn}
         </div>
       </div>

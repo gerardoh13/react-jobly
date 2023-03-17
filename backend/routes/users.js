@@ -137,6 +137,14 @@ router.post("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req
   }
 });
 
+router.get("/:username/jobs/applied", async function (req, res, next) {
+  try {
+    const jobs = await User.getApplications(req.params.username);
+    return res.json({ jobs });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 router.get("/:username/jobs/:id", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {

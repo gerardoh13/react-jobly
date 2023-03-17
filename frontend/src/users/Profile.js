@@ -1,11 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import UserContext from "./UserContext";
 import JoblyApi from "../api";
 import { useNavigate } from "react-router-dom";
+import JobCardMap from "../jobs/JobCardMap";
 
 function Profile() {
-  const { currUser, setCurrUser } = useContext(UserContext);
+  const { currUser, setCurrUser, applicationIds } = useContext(UserContext);
+  // console.log(currUser.applications.length)
   const [errors, setErrors] = useState([]);
+  const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: currUser.username,
@@ -14,6 +17,14 @@ function Profile() {
     email: currUser.email,
     password: "",
   });
+  useEffect(() => {
+    getApplications();
+  }, [applicationIds]);
+
+  const getApplications = async () => {
+    let appRes = await JoblyApi.getApplications(currUser.username);
+    setApplications(appRes);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,98 +83,96 @@ function Profile() {
       {e}
     </div>
   ));
-
+  let cardClass = applications.length
+    ? "card col-12 col-sm-7 col-lg-6 mt-5 m-auto"
+    : "card col-12 col-sm-6 col-md-5 col-lg-4 mt-5";
   return (
-    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 mt-5">
-      <div className="card-body">
-        <h5 className="card-title">Profile</h5>
-        <form onSubmit={handleSubmit}>
-          {errors.length ? alerts : null}
-          <div className="form-floating my-3">
-            <input
-              className="form-control"
-              type="text"
-              id="username"
-              value={formData.username}
-              placeholder="username"
-              autoComplete="username"
-              disabled
-              readOnly
-            />
-            <label htmlFor="username">Username</label>
-          </div>
-          <div className="form-floating my-3">
-            <input
-              className="form-control"
-              type="text"
-              name="firstName"
-              id="firstName"
-              value={formData.firstName}
-              placeholder="firstname"
-              required
-              onChange={handleChange}
-            />
-            <label htmlFor="firstName">First Name</label>
-          </div>
-          <div className="form-floating my-3">
-            <input
-              className="form-control"
-              type="text"
-              name="lastName"
-              id="lastName"
-              value={formData.lastName}
-              placeholder="lastname"
-              required
-              onChange={handleChange}
-            />
-            <label htmlFor="lastName">Last Name</label>
-          </div>
-          <div className="form-floating my-3">
-            <input
-              className="form-control"
-              type="email"
-              name="email"
-              id="email"
-              value={formData.email}
-              placeholder="email"
-              required
-              minLength="6"
-              onChange={handleChange}
-            />
-            <label htmlFor="email">Email</label>
-          </div>
-          <div className="form-floating mb-3">
-            <input
-              className="form-control"
-              type="password"
-              name="password"
-              id="password"
-              value={formData.password}
-              placeholder="password"
-              required
-              minLength="5"
-              autoComplete="current-password"
-              onChange={handleChange}
-            />
-            <label htmlFor="password">Confirm password to make changes</label>
-          </div>
-          {/* <div className="form-floating mb-3">
-            <input
-              className="form-control"
-              type="password"
-              name="confirmPwd"
-              id="confirmPwd"
-              value={formData.confirmPwd}
-              placeholder="confirm password"
-              required
-              minLength="5"
-              onChange={handleChange}
-            />
-            <label htmlFor="confirmPwd">Confirm Password</label>
-          </div> */}
-          <button className="btn btn-primary form-control">Save Changes</button>
-        </form>
+    <div className={applications.length ? "row" : "content"}>
+      <div className={cardClass}>
+        <div className="card-body">
+          <h5 className="card-title">Edit Profile</h5>
+          <form onSubmit={handleSubmit}>
+            {errors.length ? alerts : null}
+            <div className="form-floating my-3">
+              <input
+                className="form-control"
+                type="text"
+                id="username"
+                value={formData.username}
+                placeholder="username"
+                autoComplete="username"
+                disabled
+                readOnly
+              />
+              <label htmlFor="username">Username</label>
+            </div>
+            <div className="form-floating my-3">
+              <input
+                className="form-control"
+                type="text"
+                name="firstName"
+                id="firstName"
+                value={formData.firstName}
+                placeholder="firstname"
+                required
+                onChange={handleChange}
+              />
+              <label htmlFor="firstName">First Name</label>
+            </div>
+            <div className="form-floating my-3">
+              <input
+                className="form-control"
+                type="text"
+                name="lastName"
+                id="lastName"
+                value={formData.lastName}
+                placeholder="lastname"
+                required
+                onChange={handleChange}
+              />
+              <label htmlFor="lastName">Last Name</label>
+            </div>
+            <div className="form-floating my-3">
+              <input
+                className="form-control"
+                type="email"
+                name="email"
+                id="email"
+                value={formData.email}
+                placeholder="email"
+                required
+                minLength="6"
+                onChange={handleChange}
+              />
+              <label htmlFor="email">Email</label>
+            </div>
+            <div className="form-floating mb-3">
+              <input
+                className="form-control"
+                type="password"
+                name="password"
+                id="password"
+                value={formData.password}
+                placeholder="password"
+                required
+                minLength="5"
+                autoComplete="current-password"
+                onChange={handleChange}
+              />
+              <label htmlFor="password">Confirm password to make changes</label>
+            </div>
+            <button className="btn btn-primary form-control">
+              Save Changes
+            </button>
+          </form>
+        </div>
       </div>
+      {applications.length ? (
+        <div className="col-12 col-sm-7 col-lg-6 mt-5 m-auto">
+          <h2 className="text-light text-center">Applications</h2>
+          <JobCardMap jobs={applications} profile />
+        </div>
+      ) : null}
     </div>
   );
 }

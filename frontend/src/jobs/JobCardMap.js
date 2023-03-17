@@ -1,7 +1,8 @@
 import React from "react";
 import JobCard from "./JobCard";
 
-function JobCardMap({ jobs, setdeleteId, company, setShowConfirm }) {
+function JobCardMap({ jobs, setdeleteId, company, setShowConfirm, profile }) {
+  
   return (
     <>
       {jobs.map((job) => (
@@ -14,6 +15,7 @@ function JobCardMap({ jobs, setdeleteId, company, setShowConfirm }) {
           title={job.title}
           setdeleteId={setdeleteId}
           setShow={setShowConfirm}
+          profile={profile}
         />
       ))}
     </>

@@ -82,6 +82,7 @@ function App() {
         <UserContext.Provider
           value={{
             currUser,
+            applicationIds,
             setCurrUser,
             applyToJob,
             checkIfApplied,

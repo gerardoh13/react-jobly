@@ -211,6 +211,21 @@ class User {
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
 
+static async checkValidUsername(username) {
+  const userRes = await db.query(
+    `SELECT username
+     FROM users
+     WHERE username = $1`, [username]);
+     return userRes.rows[0];
+}
+
+static async checkValidJob(jobId) {
+  const jobRes = await db.query(
+    `SELECT id
+     FROM jobs
+     WHERE id = $1`, [jobId]);
+     return jobRes.rows[0];
+}
   /** Apply for job: update db, returns undefined.
    *
    * - username: username applying for job
@@ -218,20 +233,10 @@ class User {
    **/
 
   static async applyToJob(username, jobId) {
-    const preCheck = await db.query(
-          `SELECT id
-           FROM jobs
-           WHERE id = $1`, [jobId]);
-    const job = preCheck.rows[0];
-
+    const job = this.checkValidJob(jobId)
     if (!job) throw new NotFoundError(`No job: ${jobId}`);
 
-    const preCheck2 = await db.query(
-          `SELECT username
-           FROM users
-           WHERE username = $1`, [username]);
-    const user = preCheck2.rows[0];
-
+    const user = this.checkValidUsername(username);
     if (!user) throw new NotFoundError(`No username: ${username}`);
 
     await db.query(
@@ -239,22 +244,16 @@ class User {
            VALUES ($1, $2)`,
         [jobId, username]);
   }
-
+  /** Unapply for job: update db, returns undefined.
+   *
+   * - username: username applying for job
+   * - jobId: job id
+   **/
   static async unApplyToJob(username, jobId) {
-    const preCheck = await db.query(
-          `SELECT id
-           FROM jobs
-           WHERE id = $1`, [jobId]);
-    const job = preCheck.rows[0];
-
+    const job = this.checkValidJob(jobId)
     if (!job) throw new NotFoundError(`No job: ${jobId}`);
 
-    const preCheck2 = await db.query(
-          `SELECT username
-           FROM users
-           WHERE username = $1`, [username]);
-    const user = preCheck2.rows[0];
-
+    const user = this.checkValidUsername(username);
     if (!user) throw new NotFoundError(`No username: ${username}`);
 
     await db.query(
@@ -262,6 +261,25 @@ class User {
           WHERE username = $1
           AND job_id = $2`,
         [username, jobId]);
+  }
+
+  static async getApplications(username) {
+    const user = this.checkValidUsername(username);
+    if (!user) throw new NotFoundError(`No username: ${username}`);
+
+    const jobsRes = await db.query(
+      `SELECT j.id,
+              j.title,
+              j.salary,
+              j.equity,
+              j.company_handle AS "companyHandle",
+              c.name AS "companyName" 
+      FROM jobs j
+      LEFT JOIN companies AS c ON c.handle = j.company_handle
+      WHERE j.id IN (SELECT job_id FROM applications 
+      WHERE username = $1)`,
+        [username]);
+        return jobsRes.rows;
   }
 }
 

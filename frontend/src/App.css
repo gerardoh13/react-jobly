@@ -21,3 +21,13 @@ nav {
 .pointer {
   cursor: pointer;
 }
+
+.content {
+  display: contents;
+}
+
+.btnBottomEnd {
+  position: absolute;
+  bottom: 16px;
+  right: 12px
+}
