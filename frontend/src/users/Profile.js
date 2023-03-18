@@ -6,7 +6,6 @@ import JobCardMap from "../jobs/JobCardMap";
 
 function Profile() {
   const { currUser, setCurrUser, applicationIds } = useContext(UserContext);
-  // console.log(currUser.applications.length)
   const [errors, setErrors] = useState([]);
   const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
@@ -84,11 +83,14 @@ function Profile() {
     </div>
   ));
   let cardClass = applications.length
-    ? "card col-12 col-sm-7 col-lg-6 mt-5 m-auto"
-    : "card col-12 col-sm-6 col-md-5 col-lg-4 mt-5";
+    ? "col-11 col-sm-7 col-lg-6 mt-5 m-auto"
+    : "col-11 col-sm-6 col-md-5 col-lg-4 mt-5";
   return (
-    <div className={applications.length ? "row" : "content"}>
+    <div className={applications.length ? "row profileDiv" : "content"}>
+      
       <div className={cardClass}>
+      <h2 className="text-light text-center">My Profile</h2>
+      <div className="card">
         <div className="card-body">
           <h5 className="card-title">Edit Profile</h5>
           <form onSubmit={handleSubmit}>
@@ -167,6 +169,8 @@ function Profile() {
           </form>
         </div>
       </div>
+      </div>
+
       {applications.length ? (
         <div className="col-12 col-sm-7 col-lg-6 mt-5 m-auto">
           <h2 className="text-light text-center">Applications</h2>

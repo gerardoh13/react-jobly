@@ -113,6 +113,11 @@ class JoblyApi {
     return res.job;
   }
 
+  static async editJob(id, data) {
+    let res = await this.request(`jobs/${id}`, data, "patch");
+    return res.job;
+  }
+
   static async deleteJob(id) {
     let res = await this.request(`jobs/${id}`, {}, "delete");
     return res;

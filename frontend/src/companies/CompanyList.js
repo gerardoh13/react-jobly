@@ -4,7 +4,7 @@ import Pagination from "../common/Pagination";
 import CompanyCard from "./CompanyCard";
 import SearchAndFilter from "../common/SearchAndFilter";
 import UserContext from "../users/UserContext";
-import AddCompanyForm from "./AddCompanyForm";
+import CompanyForm from "./CompanyForm";
 
 function CompanyList() {
   const [companies, setCompanies] = useState([]);
@@ -77,7 +77,7 @@ function CompanyList() {
   }`;
   return (
     <>
-      <AddCompanyForm show={show} setShow={setShow} submit={addCompany} />
+      <CompanyForm show={show} setShow={setShow} submit={addCompany} />
       <div className="mt-5 col-sm-7 col-12">
         <SearchAndFilter search={getCompanies} />
       </div>

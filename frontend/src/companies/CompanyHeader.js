@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ConfirmModal from "../common/ConfirmModal";
 import JoblyApi from "../api";
 import { useNavigate } from "react-router-dom";
-import AddCompanyForm from "./AddCompanyForm";
+import AddCompanyForm from "./CompanyForm";
 
 function CompanyHeader({ company, admin }) {
   const [showConfirm, setShowConfirm] = useState(false);
@@ -17,7 +17,7 @@ function CompanyHeader({ company, admin }) {
   };
 
   const editCompany = async (data) => {
-    delete data.handle
+    delete data.handle;
     await JoblyApi.editCompany(company.handle, data);
     close();
     navigate("/companies");
@@ -49,7 +49,7 @@ function CompanyHeader({ company, admin }) {
             ) : null}
           </div>
           <p className="card-text">{company.description}</p>
-          <br />
+          {company.numEmployees ? <span>Employees: {company.numEmployees}</span> : null}
           {admin ? (
             <div className="text-end">
               <button

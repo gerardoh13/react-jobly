@@ -1,47 +1,37 @@
-import React, { useState, useEffect, useContext } from "react";
-import JoblyApi from "../api";
+import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import UserContext from "../users/UserContext";
-import { useParams } from "react-router-dom";
 
-function AddJobForm({ show, setShow, addJob }) {
-  const { handle } = useParams();
-
+function EditJobForm({ show, setShow, editJob, job, company }) {
   let DEFAULT_FORM = {
+    id: "",
     title: "",
+    companyName: "",
     salary: "",
     equity: "",
   };
   const [formData, setFormData] = useState(DEFAULT_FORM);
-  const [handles, setHandles] = useState([]);
-  const [currHandle, setCurrHandle] = useState(null);
-
-  const { currUser } = useContext(UserContext);
 
   useEffect(() => {
-    async function getHandles() {
-      if (currUser.isAdmin) {
-        let handlesRes = await JoblyApi.getHandles();
-        setHandles(handlesRes);
-      }
+    if (job) {
+      setFormData({
+        id: job.id,
+        title: job.title,
+        companyName: job.companyName || company.name,
+        salary: job.salary || "",
+        equity: job.equity || "",
+      });
     }
-    getHandles();
-  }, [currUser]);
-
-  useEffect(() => {
-    setCurrHandle(handle || "");
-  }, [handle]);
+  }, [job, company]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !currHandle) return;
-    let newJob = {
+    if (!formData.title) return;
+    let editedJob = {
       title: formData.title,
-      companyHandle: currHandle,
     };
-    if (formData.salary) newJob.salary = +formData.salary;
-    if (formData.equity) newJob.equity = formData.equity;
-    addJob(newJob);
+    if (formData.salary) editedJob.salary = +formData.salary;
+    if (formData.equity) editedJob.equity = formData.equity;
+    editJob(formData.id, editedJob);
     resetForm();
   };
 
@@ -58,16 +48,10 @@ function AddJobForm({ show, setShow, addJob }) {
     setShow(false);
   };
 
-  const options = handles.map((handle) => (
-    <option key={handle} value={handle}>
-      {handle}
-    </option>
-  ));
-
   return (
     <Modal show={show}>
       <Modal.Header>
-        <Modal.Title>Add New Job</Modal.Title>
+        <Modal.Title>{job ? "Edit Job" : "Add New Job"}</Modal.Title>
         <button
           className="btn-close"
           aria-label="Close"
@@ -87,19 +71,20 @@ function AddJobForm({ show, setShow, addJob }) {
               required
               onChange={handleChange}
             />
-            <label htmlFor="title">Title (Required)</label>
+            <label htmlFor="title">Title (Required):</label>
           </div>
-          <select
-            className="form-select mt-3"
-            name="handle"
-            required
-            value={currHandle}
-            disabled={handle}
-            onChange={(e) => setCurrHandle(e.target.value)}
-          >
-            <option value="">Company (Required)</option>
-            {options}
-          </select>
+          <div className="form-floating my-2">
+            <input
+              className="form-control"
+              type="text"
+              id="company"
+              value={formData.companyName}
+              placeholder="company"
+              readOnly
+              disabled
+            />
+            <label htmlFor="company">Company:</label>
+          </div>
           <div className="form-floating my-3">
             <input
               className="form-control"
@@ -111,7 +96,7 @@ function AddJobForm({ show, setShow, addJob }) {
               placeholder="salary"
               onChange={handleChange}
             />
-            <label htmlFor="title">Salary</label>
+            <label htmlFor="title">Salary:</label>
           </div>
           <div className="form-floating my-3">
             <input
@@ -126,7 +111,7 @@ function AddJobForm({ show, setShow, addJob }) {
               placeholder="equity"
               onChange={handleChange}
             />
-            <label htmlFor="equity">Equity</label>
+            <label htmlFor="equity">Equity:</label>
           </div>
           <div className="float-end">
             <button
@@ -137,7 +122,9 @@ function AddJobForm({ show, setShow, addJob }) {
             >
               Close
             </button>
-            <button className="btn btn-success">Add Job</button>
+            <button className="btn btn-success">
+              {job ? "Edit" : "Add"} Job
+            </button>
           </div>
         </form>
       </Modal.Body>
@@ -145,4 +132,4 @@ function AddJobForm({ show, setShow, addJob }) {
   );
 }
 
-export default AddJobForm;
+export default EditJobForm;

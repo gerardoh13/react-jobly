@@ -1,5 +1,4 @@
 .App {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -10,8 +9,8 @@ nav {
   width: 100%;
 }
 
-.marginT10 {
-  margin-top: 10%;
+.navbar {
+  background-color: rgb(33, 48, 54);
 }
 
 .smLogo {
@@ -30,4 +29,16 @@ nav {
   position: absolute;
   bottom: 16px;
   right: 12px
+}
+
+@media (min-width: 576px) {
+  .profileDiv {
+    width: 90vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .profileDiv {
+    width: 60vw;
+  }
 }

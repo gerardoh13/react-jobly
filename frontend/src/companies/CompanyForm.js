@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Alerts from "../common/Alerts";
 import UserContext from "../users/UserContext";
 
-function AddCompanyForm({ show, setShow, submit, company }) {
+function CompanyForm({ show, setShow, submit, company }) {
   let DEFAULT_FORM = company
     ? {
         name: company.name,
@@ -155,4 +155,4 @@ function AddCompanyForm({ show, setShow, submit, company }) {
   );
 }
 
-export default AddCompanyForm;
+export default CompanyForm;

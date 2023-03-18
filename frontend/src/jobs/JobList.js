@@ -5,6 +5,7 @@ import SearchAndFilter from "../common/SearchAndFilter";
 import { useParams } from "react-router-dom";
 import UserContext from "../users/UserContext";
 import AddJobForm from "./AddJobForm";
+import EditJobForm from "./EditJobForm";
 import ConfirmModal from "../common/ConfirmModal";
 import CompanyHeader from "../companies/CompanyHeader";
 import JobCardMap from "./JobCardMap";
@@ -13,7 +14,9 @@ function JobList() {
   const [jobs, setJobs] = useState([]);
   const [pagination, setPages] = useState({ index: 0 });
   const [company, setCompany] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+  const [jobToEdit, setJobToEdit] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setdeleteId] = useState(null);
 
@@ -52,6 +55,11 @@ function JobList() {
 
   const addJob = async (data) => {
     await JoblyApi.addJob(data);
+    getJobs();
+  };
+
+  const editJob = async (id, data) => {
+    await JoblyApi.editJob(id, data);
     getJobs();
   };
 
@@ -95,7 +103,7 @@ function JobList() {
     ) : null;
 
   let header = company ? (
-    <CompanyHeader company={company} setShowForm={setShowForm} admin={currUser.isAdmin} />
+    <CompanyHeader company={company} admin={currUser.isAdmin} />
   ) : null;
 
   let btnColClass = `col-sm-12 col-md-3 mb-sm-2 ${
@@ -108,7 +116,14 @@ function JobList() {
         close={closeConfirmModal}
         confirm={deleteJob}
       />
-      <AddJobForm show={showForm} setShow={setShowForm} addJob={addJob} />
+      <AddJobForm show={showAddForm} setShow={setShowAddForm} addJob={addJob} />
+      <EditJobForm
+        show={showEditForm}
+        setShow={setShowEditForm}
+        editJob={editJob}
+        job={jobToEdit}
+        company={company}
+      />
       <div className="mt-5 col-sm-7 col-12">
         {handle ? header : <SearchAndFilter search={getJobs} />}
       </div>
@@ -117,7 +132,7 @@ function JobList() {
           <div className={btnColClass}>
             <button
               className="btn btn-success"
-              onClick={() => setShowForm(true)}
+              onClick={() => setShowAddForm(true)}
             >
               Add Job
             </button>
@@ -135,6 +150,8 @@ function JobList() {
           setdeleteId={setdeleteId}
           company={company}
           setShowConfirm={setShowConfirm}
+          setJobToEdit={setJobToEdit}
+          setShowForm={setShowEditForm}
         />
       ) : (
         <div className="card">

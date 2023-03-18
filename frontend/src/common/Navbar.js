@@ -94,7 +94,7 @@ function Navbar({ logout }) {
   );
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-dark">
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">
           Jobly

@@ -1,20 +1,26 @@
 import React from "react";
 import JobCard from "./JobCard";
 
-function JobCardMap({ jobs, setdeleteId, company, setShowConfirm, profile }) {
-  
+function JobCardMap({
+  jobs,
+  setdeleteId,
+  company,
+  setShowConfirm,
+  profile,
+  setJobToEdit,
+  setShowForm,
+}) {
   return (
     <>
       {jobs.map((job) => (
         <JobCard
           key={job.id}
-          id={job.id}
           companyName={job.companyName || company.name}
-          equity={job.equity}
-          salary={job.salary}
-          title={job.title}
+          job={job}
           setdeleteId={setdeleteId}
-          setShow={setShowConfirm}
+          setJobToEdit={setJobToEdit}
+          setShowForm={setShowForm}
+          setShowConfirm={setShowConfirm}
           profile={profile}
         />
       ))}

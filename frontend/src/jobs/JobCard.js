@@ -3,44 +3,46 @@ import UserContext from "../users/UserContext";
 
 function JobCard({
   companyName,
-  equity,
-  salary,
-  title,
-  id,
+  job,
   setdeleteId,
-  setShow,
+  setShowConfirm,
   profile,
+  setJobToEdit,
+  setShowForm,
 }) {
   const [applied, setApplied] = useState(false);
   const { applyToJob, checkIfApplied, currUser, unApplyToJob } =
     useContext(UserContext);
 
   useEffect(() => {
-    setApplied(checkIfApplied(id));
-  }, [id, checkIfApplied]);
+    setApplied(checkIfApplied(job.id));
+  }, [job.id, checkIfApplied]);
 
   const apply = async () => {
-    if (checkIfApplied(id)) return;
-    await applyToJob(id);
+    if (checkIfApplied(job.id)) return;
+    await applyToJob(job.id);
     setApplied(true);
   };
 
   const unApply = async () => {
-    if (!checkIfApplied(id)) return;
-    await unApplyToJob(id);
+    if (!checkIfApplied(job.id)) return;
+    await unApplyToJob(job.id);
     setApplied(false);
   };
 
   const handleDelete = () => {
-    setShow(true);
-    setdeleteId(id);
+    setdeleteId(job.id);
+    setShowConfirm(true);
   };
 
+  const handleEdit = () => {
+    setJobToEdit(job);
+    setShowForm(true);
+  };
+
+  let userBtnClass = `btn float-end ${applied ? "btn-danger" : "btn-success"}`;
   const userBtn = (
-    <button
-      className="btn btn-danger float-end"
-      onClick={applied ? unApply : apply}
-    >
+    <button className={userBtnClass} onClick={applied ? unApply : apply}>
       {applied ? "Unapply" : "Apply"}
     </button>
   );
@@ -48,8 +50,8 @@ function JobCard({
   const adminBtns = (
     <>
       <button
-        className="btn btn-outline-info me-xl-1 mb-xl-0 mb-1"
-        onClick={() => console.log("HAI")}
+        className="btn btn-outline-info me-md-1 mb-md-0 mb-1"
+        onClick={handleEdit}
       >
         <i className="bi bi-pencil-fill"></i>
       </button>
@@ -65,19 +67,23 @@ function JobCard({
       <div className="card-body row">
         <div className="col-9">
           <p>
-            <b>{title}</b>
+            <b>{job.title}</b>
             <br />
             <em>{companyName}</em>
           </p>
-          {salary ? <span>Salary: ${salary.toLocaleString()}</span> : null}
-          {equity ? (
+          {job.salary ? (
             <>
+              <span>Salary: ${job.salary.toLocaleString()}</span>
               <br />
-              <span>Equity: {equity}</span>{" "}
+            </>
+          ) : null}
+          {job.equity ? (
+            <>
+              <span>Equity: {job.equity}</span>
             </>
           ) : null}
         </div>
-        <div className="col-3 btnBottomEnd">
+        <div className="col-3 btnBottomEnd text-end">
           {currUser.isAdmin ? adminBtns : userBtn}
         </div>
       </div>

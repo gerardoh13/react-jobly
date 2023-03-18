@@ -52,6 +52,7 @@ function Signup() {
               id="username"
               value={formData.username}
               placeholder="username"
+              autoComplete="username"
               required
               onChange={handleChange}
             />
@@ -105,6 +106,7 @@ function Signup() {
               id="password"
               value={formData.password}
               placeholder="password"
+              autoComplete="current-password"
               required
               minLength="5"
               onChange={handleChange}
@@ -119,6 +121,7 @@ function Signup() {
               id="confirmPwd"
               value={formData.confirmPwd}
               placeholder="confirm password"
+              autoComplete="confirm-password"
               required
               minLength="5"
               onChange={handleChange}

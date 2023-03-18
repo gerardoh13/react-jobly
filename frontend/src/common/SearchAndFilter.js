@@ -23,8 +23,9 @@ function SearchAndFilter({ search }) {
     e.preventDefault();
     let filters = {};
     for (let key in formData) {
-      if (formData[key]) filters[key] = formData[key];
+      if (formData[key] && key) filters[key] = formData[key];
     }
+    if (filters.title) filters.title = filters.title.trim()
     search(filters);
   };
 
@@ -38,7 +39,7 @@ function SearchAndFilter({ search }) {
     } else {
       setFormData((data) => ({
         ...data,
-        [name]: value.trim(),
+        [name]: value.trimStart().replace(/\s+/g, " "),
       }));
     }
   };

@@ -35,7 +35,7 @@ function Login({ login }) {
   ));
 
   return (
-    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 marginT10">
+    <div className="card col-lg-4 col-md-5 col-sm-6 col-12 my-auto">
       <div className="card-body">
         <h5 className="card-title">Login</h5>
         <form onSubmit={handleSubmit}>
@@ -49,6 +49,7 @@ function Login({ login }) {
               value={formData.username}
               placeholder="username"
               required
+              autoComplete="username"
               onChange={handleChange}
             />
             <label htmlFor="username">Username</label>
@@ -62,6 +63,7 @@ function Login({ login }) {
               value={formData.password}
               placeholder="password"
               required
+              autoComplete="current-password"
               onChange={handleChange}
             />
             <label htmlFor="password">Password</label>
