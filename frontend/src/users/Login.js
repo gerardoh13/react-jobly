@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import Alerts from "../common/Alerts";
 
 function Login({ login }) {
   const INITIAL_STATE = {
@@ -13,6 +14,7 @@ function Login({ login }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors([]);
     let response = await login(formData);
     setFormData(INITIAL_STATE);
     if (response.valid) {
@@ -28,18 +30,12 @@ function Login({ login }) {
     }));
   };
 
-  let alerts = errors.map((e, i) => (
-    <div className="alert alert-danger " role="alert" key={i}>
-      {e}
-    </div>
-  ));
-
   return (
     <div className="card col-lg-4 col-md-5 col-sm-6 col-12 my-auto">
       <div className="card-body">
         <h5 className="card-title">Login</h5>
+        {errors.length ? <Alerts msgs={errors} /> : null}
         <form onSubmit={handleSubmit}>
-          {errors.length ? alerts : null}
           <div className="form-floating my-4">
             <input
               className="form-control"

@@ -7,13 +7,14 @@ import Profile from "../users/Profile";
 import Home from "./Home";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
-function NavRoutes({ login }) {
+
+function NavRoutes({ login, signup }) {
   return (
     <Routes>
       <Route exact path="/" element={<Home />} />
       <Route element={<PublicRoutes />}>
         <Route exact path="/login" element={<Login login={login} />} />
-        <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/signup" element={<Signup signup={signup} />} />
       </Route>
       <Route element={<PrivateRoutes />}>
         <Route exact path="/profile" element={<Profile />} />

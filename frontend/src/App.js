@@ -47,6 +47,16 @@ function App() {
     }
   };
 
+  const signup = async (data) => {
+    try {
+      let userToken = await JoblyApi.register(data);
+      setToken(userToken);
+      return { success: true };
+    } catch (errors) {
+      return { success: false, errors };
+    }
+  };
+
   const logout = async () => {
     setCurrUser(null);
     setToken(null);
@@ -90,7 +100,7 @@ function App() {
           }}
         >
           <Navbar logout={logout} />
-          {loading ? <Spinner /> : <NavRoutes login={login} />}
+          {loading ? <Spinner /> : <NavRoutes login={login} signup={signup}/>}
         </UserContext.Provider>
       </BrowserRouter>
     </div>
